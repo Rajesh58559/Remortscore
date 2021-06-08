@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+cart view of product
+{% endblock %}
+{% block title %}
+cart Product
+{% endblock %}
+{% block content %}
+<!--cart content starts-->
+<script src="{% static 'js/cart_demo.js' %}"></script>
+<link href="{% static 'css/cart_demo.css' %}" rel="stylesheet">
+<!--font-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js">
+</script>
+{% if not cart_items %}
+<div>
+    <div class="text-center">
+        <br>
+        <h1 class="text-center">
+            your cart is empty
+
+        </h1>
+        <br>
+        <p class="text-center">
+            click <a href="{% url 'takeawayapp:allProdCat' %}">here</a>
+        </p>
+    </div>
+</div>
+{% else %}
+
+<h1>Shopping Cart</h1>
+
+<div class="shopping-cart">
+
+  <div class="column-labels">
+    <label class="product-image">Image</label>
+    <label class="product-details">Product</label>
+    <label class="product-price">Price</label>
+    <label class="product-quantity">Quantity</label>
+    <label class="product-removal">Remove</label>
+    <label class="product-line-price">Total</label>
+  </div>
+
+  <div class="product">
+     {% for cart_item in cart_items %}
+    <div class="product-image">
+      <a href="{% cart_item.get_absolute_url">
+                        <img src="{{cart_item.product.product_image.url}}" alt="" width="200px; height:100px;" >
+                    </a>
+    </div>
+    <div class="product-details">
+      <div class="product-title">{{cart_item.product.product_name}}</div>
+      <p class="product-description">{{cart_item.product.product_desc}}.</p>
+    </div>
+    <div class="product-price">{{cart_item.product.product_price}}</div>
+    <div class="product-quantity">
+      {{cart_item.quantity}} x $ {{cart_item}}
+<!--      <input type="number" value="2" min="1">-->
+    </div>
+    <div class="product-removal">
+       {% if cart_item.quantity < cart_item.product.stock %}
+
+                    <a href="{% url 'cart_app:add_cart' cart_item.product.id %}" >Add</a>
+                    &nbsp;
+                    <a href="{% url 'cart_app:cart_remove' cart_item.product.id %}" class="custom_a ">minus<i class="glyphicon glyphicon-minus"></i></a>
+                    &nbsp;
+                    <a href="{% url 'cart_app:full_remove' cart_item.product.id %}" class="custom_a ">delete<i class="fas fa-trash"></i></a>
+
+
+                {% else %}
+
+
+
+                    <a href="{% url 'cart_app:cart_remove' cart_item.product.id %}" class="custom_a "><i class="glyphicon glyphicon-plus"></i></a>
+                    &nbsp;
+                    <a href="{% url 'cart_app:full_remove' cart_item.product.id %}" class="custom_a ">delete<i class="fas fa-trash"></i></a>
+
+
+                {% endif %}
+
+    </div>
+    <div class="product-line-price"> $ {{cart_item.sub_total}}</div>
+    {% endfor %}
+  </div>
+
+
+
+  <div class="totals">
+    <div class="totals-item">
+      <label>Subtotal</label>
+      <div class="totals-value" id="cart-subtotal">71.97</div>
+    </div>
+    <div class="totals-item">
+      <label>Tax (5%)</label>
+      <div class="totals-value" id="cart-tax">3.60</div>
+    </div>
+    <div class="totals-item">
+      <label>Shipping</label>
+      <div class="totals-value" id="cart-shipping">15.00</div>
+    </div>
+    <div class="totals-item totals-item-total">
+      <label>Grand Total</label>
+      <div class="totals-value" id="cart-total">{{total}}</div>
+    </div>
+  </div>
+      
+      <button class="checkout">Checkout</button>
+
+</div>
+{% endif %}
+<!--cart ends-->
+{% endblock %}

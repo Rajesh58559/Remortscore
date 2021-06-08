@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<div>
+    {% extends 'base.html' %}
+    {% load static %}
+    <!--meta description starts-->
+    {% block metadescription %}
+    {% if category %}
+    {{category.category_name|truncatewords:155}}
+    {% else %}
+    welcome to RESTORENT take your food here
+    {% endif %}
+    {% endblock %}
+    <!--meta description ends-->
+    <!--title starts-->
+    {% block title %}
+
+    {% if category %}
+    {{category.category_name}}--Restourent
+    {% else %}
+    See our categories..
+    {% endif %}
+    {% endblock %}
+    <!--title ends-->
+    <!--content starts-->
+    {% block content %}
+    {% if category %}
+
+    <div class="row my_row_class">
+        <div class="mx-auto">
+            <p>
+                <a href="{% url 'takeawayapp:allProdCat' %}">Our foods</a>
+            </p>
+        </div>
+    </div>
+    {% endif %}
+    <div class="mx-auto">
+        {% if category %}
+        <img src="{{category.image.url}}" alt="{{category.category_name}}">
+
+    </div>
+    <br>
+    <div>
+        <h1>{{category.category_name}}</h1>
+        <p>{{category.cat_desc}}</p>
+    </div>
+    {% else %}
+    <!--banner image -->
+
+    <link rel="stylesheet" href="{% static 'css/banner.css' %}">
+    <header>
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <!-- Slide One - Set the background image for this slide in the line below -->
+                <div class="carousel-item active" style="background-image: url('{% static 'image/banner.jpg' %} ')">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3 class="display-4">First Slide</h3>
+                        <p class="lead">This is a description for the first slide.</p>
+                    </div>
+                </div>
+                <!-- Slide Two - Set the background image for this slide in the line below -->
+                <div class="carousel-item" style="background-image: url('{% static 'image/banner2.jpg' %}')">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3 class="display-4">Second Slide</h3>
+                        <p class="lead">This is a description for the second slide.</p>
+                    </div>
+                </div>
+                <!-- Slide Three - Set the background image for this slide in the line below -->
+                <div class="carousel-item" style="background-image: url('{% static 'image/banner3.jpg' %}')">
+                    <div class="carousel-caption d-none d-md-block">
+                        <h3 class="display-4">Third Slide</h3>
+                        <p class="lead">This is a description for the third slide.</p>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </header>
+    <!--banner image ends-->
+
+    {% endif %}
+    <br>
+    <!--product session-->
+    <link rel="stylesheet" href="{% static 'css/product.css' %}">
+    <h1>Our Products</h1>
+
+    <div class="container">
+
+        <div class="row">
+            {% for prod in products.object_list %}
+            <div class="col-md-4 mt-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-img-actions"><a href="{{prod.get_url}}"><img src="{{prod.product_image.url}}"
+                                                                                      class="card-img img-fluid"
+                                                                                      width="96"
+                                                                                      height="250"
+                                                                                      alt="{{prod.product_name}}"
+                        ></a></div>
+                    </div>
+                    <div class="card-body bg-light text-center">
+                        <div class="mb-2">
+                            <h6 class="font-weight-semibold mb-2"><a href="#" class="text-default mb-2" data-abc="true">{{prod.product_name}}</a>
+                            </h6> <a href="#" class="text-muted" data-abc="true">Restourent
+                        </a>
+                        </div>
+                        <h3 class="mb-0 font-weight-semibold">₹{{prod.product_price}}
+                        </h3>
+                        <div><i class="fa fa-star star"></i> <i class="fa fa-star star"></i> <i
+                                class="fa fa-star star"></i>
+                            <i class="fa fa-star star"></i></div>
+                        <div class="text-muted mb-3">34 reviews</div>
+                        <button type="button" class="btn bg-cart"><i class="fa fa-cart-plus mr-2"></i> Add to cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+
+            <hr>
+            <div class="text-center">
+                <p></p>
+                {% for pg in products.paginator.page_range %}
+                <a href="?page={{page}}" class="btn btn-dark btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+
+    {% endblock %}
+    <!--content ends-->
+</div>
+{% endblock %}
